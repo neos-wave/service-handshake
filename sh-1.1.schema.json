@@ -1,0 +1,431 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neoswave.com/service-handshake/sh-1.1.schema.json",
+  "title": "Service Handshake Declaration",
+  "description": "Canonical JSON Schema for the Service Handshake Declaration (SH-1.1). An open interaction standard for AI-mediated service interactions. Published by Neos Wave under CC BY 4.0.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "principal_id",
+    "agent_id",
+    "goals"
+  ],
+  "properties": {
+    "protocol_version": {
+      "type": "string",
+      "const": "SH-1.1",
+      "description": "Schema version. Must be SH-1.1 for declarations conforming to this specification."
+    },
+    "principal_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for the party the agent represents."
+    },
+    "agent_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for the agent submitting the declaration."
+    },
+    "beneficiary_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Party who receives the outcome of the interaction. In triadic interactions, differs from principal_id."
+    },
+    "identity_tokens": {
+      "type": "array",
+      "description": "Verification tokens from identity providers (e.g. KYA, AgentFacts, Apple, OpenAI). The Service Handshake consumes only their status.",
+      "items": {
+        "$ref": "#/$defs/identityToken"
+      }
+    },
+    "issuer": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The platform or system issuing this declaration."
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 datetime from which this declaration is valid."
+    },
+    "valid_to": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 datetime after which this declaration expires."
+    },
+    "goals": {
+      "$ref": "#/$defs/goals"
+    },
+    "options_constraints": {
+      "$ref": "#/$defs/optionsConstraints"
+    },
+    "data_permissions": {
+      "$ref": "#/$defs/dataPermissions"
+    },
+    "fallback_rules": {
+      "$ref": "#/$defs/fallbackRules"
+    },
+    "cost_parameters": {
+      "$ref": "#/$defs/costParameters"
+    },
+    "authority_level": {
+      "$ref": "#/$defs/authorityLevel"
+    }
+  },
+  "$defs": {
+    "identityToken": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["issuer", "token_type"],
+      "properties": {
+        "issuer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "token_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["valid", "invalid", "expired", "unknown"]
+        },
+        "expiry": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "goals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_goal", "non_goals"],
+      "properties": {
+        "primary_goal": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The primary outcome this party is trying to achieve."
+        },
+        "secondary_goals": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Additional desired outcomes, in priority order."
+        },
+        "non_goals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Outcomes this party explicitly refuses. Acts as a safety boundary. At least one non_goal MUST be declared."
+        },
+        "success_metrics": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["boolean", "number"]
+          },
+          "description": "Measurable conditions defining a successful interaction outcome."
+        }
+      }
+    },
+    "optionsConstraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_actions", "hard_constraints"],
+      "properties": {
+        "allowed_actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Actions this agent is permitted to take during this interaction."
+        },
+        "hard_constraints": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["boolean", "number", "string"]
+          },
+          "description": "Non-negotiable rules. Must not be violated under any circumstances."
+        },
+        "soft_constraints": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["boolean", "number", "string"]
+          },
+          "description": "Preferences and trade-offs. May be relaxed if necessary to reach primary_goal."
+        },
+        "jurisdictional_constraints": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["boolean", "string", "number"]
+          },
+          "description": "Legal and regulatory constraints applicable to this interaction."
+        }
+      }
+    },
+    "dataPermissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "data_sources_allowed",
+        "data_uses_allowed",
+        "retention_policy",
+        "trust_levels"
+      ],
+      "properties": {
+        "data_sources_allowed": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Categories of data this party permits to be used in this interaction."
+        },
+        "data_uses_allowed": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Purposes for which data may be used."
+        },
+        "retention_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Declarative retention policy. Entities in regulated sectors MUST declare parameters satisfying their statutory obligations.",
+          "properties": {
+            "retain_for_days": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of days data from this interaction may be retained."
+            },
+            "policy": {
+              "type": "string",
+              "enum": [
+                "no_retention",
+                "no_retention_beyond_case",
+                "retain_per_legal_requirement"
+              ],
+              "description": "Named retention policy. Use retain_per_legal_requirement for regulated sectors."
+            }
+          },
+          "anyOf": [
+            { "required": ["retain_for_days"] },
+            { "required": ["policy"] }
+          ]
+        },
+        "trust_levels": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["self_trust"],
+          "properties": {
+            "self_trust": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Confidence threshold (0.0-1.0) above which this agent may act autonomously. Derived from platform-specific signals: model scoring, tool certainty, retrieval confidence, or equivalent proxy measures."
+            },
+            "counterparty_trust": {
+              "type": "object",
+              "additionalProperties": {
+                "type": ["boolean", "number", "string"]
+              },
+              "description": "What this party will accept from the counterparty agent without additional verification."
+            }
+          }
+        },
+        "verification_requirements": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Verification steps required before this agent may act autonomously."
+        }
+      }
+    },
+    "fallbackTrigger": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "maxProperties": 1,
+      "description": "A single fallback trigger condition. Exactly one property must be set.",
+      "properties": {
+        "if_confidence_below": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "if_unresolved_after_loops": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "if_goals_conflict_on": {
+          "type": "string",
+          "minLength": 1
+        },
+        "if_counterparty_exceeds_scope": {
+          "type": "boolean"
+        },
+        "if_vulnerability_signal_detected": {
+          "type": "boolean",
+          "const": true
+        },
+        "if_contract_cancellation_proposed": {
+          "type": "boolean"
+        },
+        "if_provider_switch_proposed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "fallbackRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fallback_triggers",
+        "fallback_actions",
+        "maximum_automation_scope",
+        "responsibility_assignment"
+      ],
+      "properties": {
+        "fallback_triggers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/fallbackTrigger"
+          },
+          "description": "Ordered list of conditions that trigger fallback. Must include at least one harm indicator (if_vulnerability_signal_detected).",
+          "contains": {
+            "type": "object",
+            "required": ["if_vulnerability_signal_detected"],
+            "properties": {
+              "if_vulnerability_signal_detected": { "const": true }
+            }
+          }
+        },
+        "fallback_actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Ordered list of actions to take when a fallback trigger fires. Processed in order."
+        },
+        "maximum_automation_scope": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Plain-language statement of what the agent may initiate but not complete without human approval."
+        },
+        "responsibility_assignment": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Role accountable when a fallback is triggered. Must be a role, not a person name."
+        }
+      }
+    },
+    "costParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Limits on interaction resource consumption. Triggers escalation when limits are approached.",
+      "properties": {
+        "max_duration_minutes": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_loops": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "escalation_on_cost": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["action"],
+          "properties": {
+            "if_duration_exceeds_minutes": {
+              "type": "number",
+              "minimum": 0
+            },
+            "action": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "authorityLevel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_scope",
+        "authority_limits"
+      ],
+      "description": "Who the agent is acting for, what it can commit to, and evidence of delegation. Where principal_id and beneficiary_id appear here, they MUST match top-level values. Validators MAY enforce this as an application-level rule.",
+      "properties": {
+        "principal_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "MUST match top-level principal_id. Included for portability in declaration fragments."
+        },
+        "beneficiary_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "MUST match top-level beneficiary_id. Included for portability in declaration fragments."
+        },
+        "authority_scope": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Actions this agent is authorised to commit the principal to."
+        },
+        "authority_limits": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Actions this agent is explicitly not authorised to commit to."
+        },
+        "delegation_proof": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Evidence of authorisation. Token, reference ID, or verification endpoint."
+        },
+        "interaction_role": {
+          "type": "string",
+          "enum": [
+            "account_holder",
+            "carer",
+            "advocate",
+            "power_of_attorney",
+            "brand_agent",
+            "third_party_representative"
+          ],
+          "description": "The role the agent is playing in this interaction."
+        }
+      }
+    }
+  }
+}

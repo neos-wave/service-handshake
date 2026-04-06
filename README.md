@@ -4,11 +4,11 @@ An open interaction standard for service interactions where one or more parties 
 
 ## This repository
 
-This repository contains the canonical machine-validatable JSON Schema for The Service Handshake Declaration (SH-1.1), and companion documentation for working implementations.
-
 | File | Description |
 |---|---|
-| `sh-1.1.schema.json` | Canonical JSON Schema for SH-1.1 declarations |
+| `THE-SERVICE-HANDSHAKE-v1.1.md` | Main standard document — foreword, case studies, declaration framework, worked examples, regulatory context |
+| `TECHNICAL-SPECIFICATION-v1.1.md` | Technical specification — full field definitions, validation rules, JSON schema, implementation guidance |
+| `sh-1.1.schema.json` | Canonical JSON Schema for machine validation of SH-1.1 declarations |
 | `docs/mode4-simulation-spec.md` | Mode 4 simulation design spec — protocol document for Customer AI ↔ Brand AI interactions |
 | `docs/mode4-voiceover-script.txt` | Narration script and voice settings for the Mode 4 simulation |
 

@@ -1,0 +1,42 @@
+MODE 4 SIMULATION — VOICEOVER SCRIPT
+Neos Wave · Dual CX Framework
+Version: 1.0 · 6 April 2026
+
+Voice ID: D7ue8wE6ek2ji78PnFiN (AI Maria, ElevenLabs)
+Model: eleven_turbo_v2_5
+Duration: ~86 seconds
+Settings: stability 0.45 · similarity_boost 0.75 · style 0.35 · use_speaker_boost true
+
+---
+
+SCRIPT:
+
+A customer contacts their AI: their delivery arrived damaged, and they want a replacement.
+
+The agent doesn't assume. It asks. What outcome are you looking for? What won't you accept? Can you share photos of the damage?
+
+Once the customer has answered, the agent has everything it needs. It builds the declaration from those answers — goals, constraints, evidence — all set by the customer, on the customer's terms.
+
+It contacts the retailer's brand agent and presents that declaration.
+
+The brand agent doesn't share its own policy. It simply checks whether the customer's declaration falls within its limits. And returns a verdict.
+
+The request is approved. A replacement is dispatched. The brand agent also sends structured return instructions — collection window, label, packaging requirements. The consumer agent translates them into plain language, and books the pickup.
+
+One message in from the customer. A replacement confirmed, a returns label arranged, a pickup booked. Everything in between — machine to machine, within the terms both parties declared in advance.
+
+This is Mode 4. This is the Service Handshake.
+
+---
+
+NARRATION SYNC NOTES:
+
+0s     — "A customer contacts their AI..."
+8s     — "The agent doesn't assume. It asks..."
+18s    — "Once the customer has answered..."
+28s    — "It contacts the retailer's brand agent..."
+36s    — "The brand agent doesn't share its own policy..."
+44s    — "The request is approved..."
+56s    — "The brand agent also sends structured return instructions..."
+68s    — "One message in from the customer..."
+80s    — "This is Mode 4. This is the Service Handshake."

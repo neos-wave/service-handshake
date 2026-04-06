@@ -4,11 +4,17 @@ An open interaction standard for service interactions where one or more parties 
 
 ## This repository
 
-This repository contains the canonical machine-validatable JSON Schema for The Service Handshake Declaration (SH-1.1).
+This repository contains the canonical machine-validatable JSON Schema for The Service Handshake Declaration (SH-1.1), and companion documentation for working implementations.
 
-**File:** `sh-1.1.schema.json`
+| File | Description |
+|---|---|
+| `sh-1.1.schema.json` | Canonical JSON Schema for SH-1.1 declarations |
+| `docs/mode4-simulation-spec.md` | Mode 4 simulation design spec — protocol document for Customer AI ↔ Brand AI interactions |
+| `docs/mode4-voiceover-script.txt` | Narration script and voice settings for the Mode 4 simulation |
 
 Implementations SHOULD validate declarations against this schema before compatibility evaluation. If the Technical Specification and this schema differ, this schema SHALL take precedence for machine validation.
+
+**Live demonstration:** [neoswave.com/mode4/](https://neoswave.com/mode4/)
 
 ## Publication
 

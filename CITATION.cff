@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use the Service Handshake, please cite it as below."
+title: "The Service Handshake"
+version: "1.2"
+date-released: 2026-10-01
+doi: 10.5281/zenodo.23181969
+url: "https://doi.org/10.5281/zenodo.23181969"
+repository-code: "https://github.com/neos-wave/service-handshake"
+license:
+  - CC-BY-4.0
+  - Apache-2.0
+type: software
+authors:
+  - family-names: McCann
+    given-names: Maria
+    affiliation: "Neos Wave Ltd"
+keywords:
+  - customer service
+  - AI agents
+  - interaction standard
+  - delegation
+  - Dual CX

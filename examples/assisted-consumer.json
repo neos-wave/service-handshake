@@ -1,0 +1,74 @@
+{
+  "protocol_version": "SH-1.2",
+  "declaration_id": "consumer-case-1042",
+  "declaration_revision": 1,
+  "principal_id": "customer-case-1042",
+  "agent_id": "consumer-agent-session-7",
+  "declaration_provenance": "assisted",
+  "disclosure": {
+    "ai_status": "ai",
+    "representative_role": "customer_representative",
+    "disclosed_at": "2026-09-28T09:00:00Z",
+    "method": "first_contact_message"
+  },
+  "confirmation": {
+    "status": "confirmed",
+    "confirmer_ref": "consumer-agent-session-7",
+    "confirmed_at": "2026-09-28T09:01:00Z",
+    "method": "summary_confirmation"
+  },
+  "unresolved_fields": [
+    "/authority_level/delegation_proof"
+  ],
+  "goals": {
+    "primary_goal": "Resolve missing delivery by refund or replacement",
+    "non_goals": [
+      "Do not accept voucher settlement",
+      "Do not change account details"
+    ]
+  },
+  "options_constraints": {
+    "allowed_actions": [
+      "accept_refund",
+      "accept_replacement"
+    ],
+    "hard_constraints": {
+      "no_vouchers": true
+    }
+  },
+  "data_permissions": {
+    "data_sources_allowed": [
+      "order_reference"
+    ],
+    "data_uses_allowed": [
+      "problem_resolution"
+    ],
+    "retention_policy": {
+      "policy": "no_retention_beyond_case"
+    }
+  },
+  "fallback_rules": {
+    "fallback_triggers": [
+      {
+        "if_vulnerability_signal_detected": true
+      },
+      {
+        "if_unresolved_after_loops": 3
+      }
+    ],
+    "fallback_actions": [
+      "request_human_review"
+    ],
+    "maximum_automation_scope": "Claims only until action authority is established",
+    "responsibility_assignment": "Customer Care Team Lead"
+  },
+  "authority_level": {
+    "authority_scope": [
+      "accept_refund",
+      "accept_replacement"
+    ],
+    "authority_limits": [
+      "no_account_changes"
+    ]
+  }
+}

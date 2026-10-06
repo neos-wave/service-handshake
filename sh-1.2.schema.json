@@ -1,0 +1,695 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:neoswave:service-handshake:sh-1.2:draft-1:declaration",
+  "title": "Service Handshake declaration SH-1.2",
+  "description": "SH-1.2 declaration. Structure records claims only; validation does not establish identity, authority, conformance or permission. Copyright 2026 Neos Wave Ltd. Licensed under the Apache License, Version 2.0 (https://www.apache.org/licenses/LICENSE-2.0).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "principal_id",
+    "agent_id",
+    "goals"
+  ],
+  "properties": {
+    "protocol_version": {
+      "type": "string",
+      "const": "SH-1.2",
+      "description": "SH-1.2 review draft representation. Not automatically valid under a SH-1.1 validator."
+    },
+    "principal_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for the party the agent represents."
+    },
+    "agent_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for the agent submitting the declaration."
+    },
+    "beneficiary_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Party who receives the outcome of the interaction. In triadic interactions, differs from principal_id."
+    },
+    "identity_tokens": {
+      "type": "array",
+      "description": "Untrusted references and asserted status. A trusted verifier must establish identity and scope when required.",
+      "items": {
+        "$ref": "#/$defs/identityToken"
+      }
+    },
+    "issuer": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The platform or system issuing this declaration."
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 datetime from which this declaration is valid."
+    },
+    "valid_to": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 datetime after which this declaration expires."
+    },
+    "goals": {
+      "$ref": "#/$defs/goals"
+    },
+    "options_constraints": {
+      "$ref": "#/$defs/optionsConstraints"
+    },
+    "data_permissions": {
+      "$ref": "#/$defs/dataPermissions"
+    },
+    "fallback_rules": {
+      "$ref": "#/$defs/fallbackRules"
+    },
+    "cost_parameters": {
+      "$ref": "#/$defs/costParameters"
+    },
+    "authority_level": {
+      "$ref": "#/$defs/authorityLevel"
+    },
+    "declaration_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declaration_revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "declaration_provenance": {
+      "type": "string",
+      "enum": [
+        "self_declared",
+        "pre_agreed",
+        "assisted"
+      ]
+    },
+    "disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ai_status": {
+          "type": "string",
+          "enum": [
+            "ai",
+            "human",
+            "unknown"
+          ]
+        },
+        "representative_role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "disclosed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "ai_status"
+      ]
+    },
+    "confirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "proposed",
+            "confirmed",
+            "declined"
+          ]
+        },
+        "confirmer_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confirmed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "confirmed"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "confirmer_ref",
+              "confirmed_at",
+              "method"
+            ]
+          }
+        }
+      ]
+    },
+    "unresolved_fields": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(/([^~/]|~[01])*)+$"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "identityToken": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issuer",
+        "token_type"
+      ],
+      "properties": {
+        "issuer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "token_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "valid",
+            "invalid",
+            "expired",
+            "unknown"
+          ]
+        },
+        "expiry": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "goals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_goal",
+        "non_goals"
+      ],
+      "properties": {
+        "primary_goal": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The primary outcome this party is trying to achieve."
+        },
+        "secondary_goals": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Additional desired outcomes, in priority order."
+        },
+        "non_goals": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Declared exclusions. Empty means no additional exclusions supplied, not permission; if unknown, mark /goals/non_goals unresolved."
+        },
+        "success_metrics": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "boolean",
+              "number"
+            ]
+          },
+          "description": "Measurable conditions defining a successful interaction outcome."
+        }
+      }
+    },
+    "optionsConstraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed_actions",
+        "hard_constraints"
+      ],
+      "properties": {
+        "allowed_actions": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Actions this agent is permitted to take during this interaction."
+        },
+        "hard_constraints": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "boolean",
+              "number",
+              "string"
+            ]
+          },
+          "description": "Non-negotiable rules. Must not be violated under any circumstances."
+        },
+        "soft_constraints": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "boolean",
+              "number",
+              "string"
+            ]
+          },
+          "description": "Preferences and trade-offs. May be relaxed if necessary to reach primary_goal."
+        },
+        "jurisdictional_constraints": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "boolean",
+              "string",
+              "number"
+            ]
+          },
+          "description": "Legal and regulatory constraints applicable to this interaction."
+        }
+      }
+    },
+    "dataPermissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "data_sources_allowed",
+        "data_uses_allowed",
+        "retention_policy"
+      ],
+      "properties": {
+        "data_sources_allowed": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Categories of data this party permits to be used in this interaction."
+        },
+        "data_uses_allowed": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Purposes for which data may be used."
+        },
+        "retention_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Declarative retention policy. Entities in regulated sectors MUST declare parameters satisfying their statutory obligations.",
+          "properties": {
+            "retain_for_days": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of days data from this interaction may be retained."
+            },
+            "policy": {
+              "type": "string",
+              "enum": [
+                "no_retention",
+                "no_retention_beyond_case",
+                "retain_per_legal_requirement"
+              ],
+              "description": "Named retention policy. Use retain_per_legal_requirement for regulated sectors."
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "retain_for_days"
+              ]
+            },
+            {
+              "required": [
+                "policy"
+              ]
+            }
+          ]
+        },
+        "trust_levels": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "self_trust"
+          ],
+          "properties": {
+            "self_trust": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Legacy operational confidence signal; never proof of authority or sufficient permission to act."
+            },
+            "counterparty_trust": {
+              "type": "object",
+              "additionalProperties": {
+                "type": [
+                  "boolean",
+                  "number",
+                  "string"
+                ]
+              },
+              "description": "What this party will accept from the counterparty agent without additional verification."
+            }
+          }
+        },
+        "verification_requirements": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Verification steps required before this agent may act autonomously."
+        }
+      }
+    },
+    "fallbackTrigger": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "maxProperties": 1,
+      "description": "A single fallback trigger condition. Exactly one property must be set.",
+      "properties": {
+        "if_confidence_below": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "if_unresolved_after_loops": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "if_goals_conflict_on": {
+          "type": "string",
+          "minLength": 1
+        },
+        "if_counterparty_exceeds_scope": {
+          "type": "boolean"
+        },
+        "if_vulnerability_signal_detected": {
+          "type": "boolean",
+          "const": true
+        },
+        "if_contract_cancellation_proposed": {
+          "type": "boolean"
+        },
+        "if_provider_switch_proposed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "fallbackRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fallback_triggers",
+        "fallback_actions",
+        "maximum_automation_scope",
+        "responsibility_assignment"
+      ],
+      "properties": {
+        "fallback_triggers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/fallbackTrigger"
+          },
+          "description": "Ordered list of conditions that trigger fallback. Must include at least one harm indicator (if_vulnerability_signal_detected).",
+          "contains": {
+            "type": "object",
+            "required": [
+              "if_vulnerability_signal_detected"
+            ],
+            "properties": {
+              "if_vulnerability_signal_detected": {
+                "const": true
+              }
+            }
+          }
+        },
+        "fallback_actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Ordered list of actions to take when a fallback trigger fires. Processed in order."
+        },
+        "maximum_automation_scope": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Plain-language statement of what the agent may initiate but not complete without human approval."
+        },
+        "responsibility_assignment": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Role accountable when a fallback is triggered. Must be a role, not a person name."
+        },
+        "precedence_logic": {
+          "type": "string",
+          "enum": [
+            "CONSUMER_PRIORITY",
+            "BRAND_PRIORITY",
+            "PRE_NEGOTIATED_TREATY"
+          ],
+          "description": "Escalation preference only; cannot override authority, safeguarding or applicable duties."
+        }
+      }
+    },
+    "costParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Limits on interaction resource consumption. Triggers escalation when limits are approached.",
+      "properties": {
+        "max_duration_minutes": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_loops": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "escalation_on_cost": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "action"
+          ],
+          "properties": {
+            "if_duration_exceeds_minutes": {
+              "type": "number",
+              "minimum": 0
+            },
+            "action": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "authorityLevel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_scope",
+        "authority_limits"
+      ],
+      "description": "Asserted scope and limits. Repeated principal and beneficiary identifiers MUST match canonical top-level values. Trusted application checks are mandatory where relevant.",
+      "properties": {
+        "principal_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "MUST match top-level principal_id. Included for portability in declaration fragments."
+        },
+        "beneficiary_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "MUST match top-level beneficiary_id. Included for portability in declaration fragments."
+        },
+        "authority_scope": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Actions this agent is authorised to commit the principal to."
+        },
+        "authority_limits": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Actions this agent is explicitly not authorised to commit to."
+        },
+        "delegation_proof": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Untrusted evidence reference, not a verifier result. Its presence or a textual proof label never establishes delegation."
+        },
+        "interaction_role": {
+          "type": "string",
+          "enum": [
+            "account_holder",
+            "carer",
+            "advocate",
+            "power_of_attorney",
+            "brand_agent",
+            "third_party_representative"
+          ],
+          "description": "The role the agent is playing in this interaction."
+        },
+        "financial_limits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/financialLimit"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "financialLimit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "action_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "max_amount_minor": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "currency_exponent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "basis": {
+          "type": "string",
+          "enum": [
+            "per_action",
+            "aggregate_period",
+            "recurring_total"
+          ]
+        },
+        "period_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "policy_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "action_type",
+        "max_amount_minor",
+        "currency",
+        "currency_exponent",
+        "basis",
+        "policy_ref"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "basis": {
+                "const": "aggregate_period"
+              }
+            },
+            "required": [
+              "basis"
+            ]
+          },
+          "then": {
+            "required": [
+              "period_seconds"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "period_seconds"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "declaration_provenance"
+        ],
+        "properties": {
+          "declaration_provenance": {
+            "const": "assisted"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "disclosure",
+          "confirmation"
+        ]
+      }
+    }
+  ]
+}

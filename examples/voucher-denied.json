@@ -1,0 +1,54 @@
+{
+  "protocol_version": "SH-1.2",
+  "assessment_id": "voucher-assessment-1042",
+  "interaction_id": "case-1042",
+  "profile": "participation",
+  "assessor_ref": "illustrative-service-policy",
+  "assessed_at": "2026-09-28T09:02:00Z",
+  "policy_ref": "illustrative-retail-policy-1",
+  "declarations": [
+    {
+      "party_role": "consumer",
+      "declaration_id": "consumer-case-1042",
+      "revision": 1,
+      "sha256": "2fdd749b0e22d741c7adb9e6c7c652ad7940784352ebd592368558a169a4ae97"
+    },
+    {
+      "party_role": "company",
+      "declaration_id": "brand-case-1042",
+      "revision": 1,
+      "sha256": "47816f8332efe5e667b93b6958280de9d8670ad5491a17886a1f0db468d884d6"
+    }
+  ],
+  "action": {
+    "proposal_id": "voucher-proposal-1042-r2",
+    "category": "service_action",
+    "action_type": "voucher",
+    "resource_ref": "order-1042",
+    "material_terms": {
+      "delivery_channel": "registered_email",
+      "settlement_waiver": false
+    },
+    "irreversible": false,
+    "safeguarding_required": false,
+    "expires_at": "2026-09-28T09:10:00Z",
+    "financial": {
+      "amount_minor": 4000,
+      "currency": "GBP",
+      "currency_exponent": 2
+    }
+  },
+  "verification_results": [],
+  "decision": "deny",
+  "reasons": [
+    {
+      "code": "BOUNDARY_CONFLICT",
+      "explanation": "Voucher settlement conflicts with the consumer non-goal.",
+      "required_next_step": "Assess a refund or replacement separately; authority remains unresolved."
+    }
+  ],
+  "responsible_role": "Customer Care Team Lead",
+  "execution": {
+    "status": "not_started"
+  }
+}

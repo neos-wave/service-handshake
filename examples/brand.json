@@ -1,0 +1,77 @@
+{
+  "protocol_version": "SH-1.2",
+  "declaration_id": "brand-case-1042",
+  "declaration_revision": 1,
+  "principal_id": "retailer",
+  "agent_id": "staff-case-1042-ref",
+  "declaration_provenance": "self_declared",
+  "disclosure": {
+    "ai_status": "human",
+    "representative_role": "company_staff",
+    "disclosed_at": "2026-09-28T09:00:00Z",
+    "method": "first_contact_message"
+  },
+  "goals": {
+    "primary_goal": "Resolve the missing delivery",
+    "non_goals": [
+      "Do not exceed company authority"
+    ]
+  },
+  "options_constraints": {
+    "allowed_actions": [
+      "offer_refund",
+      "offer_replacement",
+      "offer_voucher"
+    ],
+    "hard_constraints": {
+      "refund_original_method_only": true
+    }
+  },
+  "data_permissions": {
+    "data_sources_allowed": [
+      "order_reference"
+    ],
+    "data_uses_allowed": [
+      "problem_resolution"
+    ],
+    "retention_policy": {
+      "policy": "no_retention_beyond_case"
+    }
+  },
+  "fallback_rules": {
+    "fallback_triggers": [
+      {
+        "if_vulnerability_signal_detected": true
+      },
+      {
+        "if_counterparty_exceeds_scope": true
+      }
+    ],
+    "fallback_actions": [
+      "human_review"
+    ],
+    "maximum_automation_scope": "Within verified action authority and policy",
+    "responsibility_assignment": "Customer Care Team Lead",
+    "precedence_logic": "CONSUMER_PRIORITY"
+  },
+  "authority_level": {
+    "authority_scope": [
+      "offer_refund",
+      "offer_replacement",
+      "offer_voucher"
+    ],
+    "authority_limits": [
+      "no_policy_exceptions"
+    ],
+    "financial_limits": [
+      {
+        "action_type": "refund",
+        "max_amount_minor": 10000,
+        "currency": "GBP",
+        "currency_exponent": 2,
+        "basis": "per_action",
+        "policy_ref": "illustrative-retail-policy-1"
+      }
+    ]
+  }
+}

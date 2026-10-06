@@ -1,0 +1,78 @@
+{
+  "protocol_version": "SH-1.2",
+  "declaration_id": "utility-case-22",
+  "declaration_revision": 1,
+  "principal_id": "parent-account-holder-22",
+  "beneficiary_id": "parent-account-holder-22",
+  "agent_id": "family-configured-agent-22",
+  "issuer": "family-representative-22",
+  "declaration_provenance": "self_declared",
+  "disclosure": {
+    "ai_status": "ai",
+    "representative_role": "family_representative"
+  },
+  "goals": {
+    "primary_goal": "Keep utilities active and discuss affordable renewal options",
+    "non_goals": [
+      "Do not cancel service",
+      "Do not switch providers"
+    ]
+  },
+  "options_constraints": {
+    "allowed_actions": [
+      "com.example.utility:discuss_billing",
+      "com.example.utility:request_renewal_options"
+    ],
+    "hard_constraints": {
+      "no_cancellation": true,
+      "no_provider_switch": true
+    }
+  },
+  "data_permissions": {
+    "data_sources_allowed": [
+      "account_reference",
+      "billing_history"
+    ],
+    "data_uses_allowed": [
+      "service_management"
+    ],
+    "retention_policy": {
+      "retain_for_days": 30
+    }
+  },
+  "fallback_rules": {
+    "fallback_triggers": [
+      {
+        "if_contract_cancellation_proposed": true
+      },
+      {
+        "if_provider_switch_proposed": true
+      },
+      {
+        "if_vulnerability_signal_detected": true
+      }
+    ],
+    "fallback_actions": [
+      "refer_to_authorised_representative"
+    ],
+    "maximum_automation_scope": "Discuss options only after access authority is verified; no changes.",
+    "responsibility_assignment": "Authorised Account Representative"
+  },
+  "authority_level": {
+    "principal_id": "parent-account-holder-22",
+    "beneficiary_id": "parent-account-holder-22",
+    "authority_scope": [
+      "com.example.utility:discuss_billing",
+      "com.example.utility:request_renewal_options"
+    ],
+    "authority_limits": [
+      "no_cancellation",
+      "no_provider_switch"
+    ],
+    "delegation_proof": "case-evidence-22-pending-verification",
+    "interaction_role": "third_party_representative"
+  },
+  "unresolved_fields": [
+    "/authority_level/delegation_proof"
+  ]
+}

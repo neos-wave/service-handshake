@@ -1,0 +1,562 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol_version": {
+      "const": "SH-1.2"
+    },
+    "assessment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "interaction_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "profile": {
+      "type": "string",
+      "enum": [
+        "participation",
+        "verified_authority"
+      ]
+    },
+    "assessor_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assessed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "policy_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declarations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "party_role": {
+            "type": "string",
+            "enum": [
+              "consumer",
+              "company"
+            ]
+          },
+          "declaration_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "party_role",
+          "declaration_id",
+          "revision",
+          "sha256"
+        ]
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "allOf": [
+        {
+          "contains": {
+            "properties": {
+              "party_role": {
+                "const": "consumer"
+              }
+            },
+            "required": [
+              "party_role"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "party_role": {
+                "const": "company"
+              }
+            },
+            "required": [
+              "party_role"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "proposal_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "public_information",
+            "protected_information",
+            "service_action"
+          ]
+        },
+        "action_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resource_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "material_terms": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "irreversible": {
+          "type": "boolean"
+        },
+        "safeguarding_required": {
+          "type": "boolean"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "financial": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "amount_minor": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "currency": {
+              "type": "string",
+              "pattern": "^[A-Z]{3}$"
+            },
+            "currency_exponent": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4
+            },
+            "recurrence": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "interval_seconds": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                },
+                "max_occurrences": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "interval_seconds",
+                "max_occurrences"
+              ]
+            }
+          },
+          "required": [
+            "amount_minor",
+            "currency",
+            "currency_exponent"
+          ]
+        }
+      },
+      "required": [
+        "proposal_id",
+        "category",
+        "action_type",
+        "resource_ref",
+        "material_terms",
+        "irreversible",
+        "safeguarding_required",
+        "expires_at"
+      ]
+    },
+    "verification_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "party_role": {
+            "type": "string",
+            "enum": [
+              "consumer",
+              "company"
+            ]
+          },
+          "evidence_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mechanism": {
+            "type": "string",
+            "minLength": 1
+          },
+          "issuer_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subject_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "requester_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "audience_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "proposal_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "verified_by": {
+            "type": "string",
+            "minLength": 1
+          },
+          "verified_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "valid_from": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "valid_to": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status_checked_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status_method": {
+            "type": "string",
+            "minLength": 1
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "invalid",
+              "unknown",
+              "expired",
+              "revoked"
+            ]
+          },
+          "binding_verified": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "party_role",
+          "evidence_ref",
+          "mechanism",
+          "issuer_ref",
+          "subject_ref",
+          "requester_ref",
+          "audience_ref",
+          "proposal_id",
+          "scope",
+          "verified_by",
+          "verified_at",
+          "valid_from",
+          "valid_to",
+          "status_checked_at",
+          "status_method",
+          "result",
+          "binding_verified"
+        ]
+      },
+      "minItems": 0
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "allow",
+        "deny",
+        "hold",
+        "escalate"
+      ]
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "explanation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required_next_step": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "code",
+          "explanation",
+          "required_next_step"
+        ]
+      },
+      "minItems": 0
+    },
+    "responsible_role": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "replay_control_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "not_started",
+            "completed",
+            "failed",
+            "unknown"
+          ]
+        },
+        "receipt_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "status"
+      ]
+    }
+  },
+  "required": [
+    "protocol_version",
+    "assessment_id",
+    "interaction_id",
+    "profile",
+    "assessor_ref",
+    "assessed_at",
+    "policy_ref",
+    "declarations",
+    "action",
+    "verification_results",
+    "decision",
+    "reasons",
+    "responsible_role",
+    "execution"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:neoswave:service-handshake:sh-1.2:draft-1:assessment",
+  "title": "Service Handshake action assessment SH-1.2",
+  "description": "Trusted relying-party record format, NOT a credential. Incoming records remain untrusted. Application checks must verify evidence, action and declaration bindings, policy, time, permissions and execution. Copyright 2026 Neos Wave Ltd. Licensed under the Apache License, Version 2.0 (https://www.apache.org/licenses/LICENSE-2.0).",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "enum": [
+              "deny",
+              "hold",
+              "escalate"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reasons": {
+            "minItems": 1
+          },
+          "execution": {
+            "properties": {
+              "status": {
+                "const": "not_started"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "const": "allow"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "action": {
+            "properties": {
+              "safeguarding_required": {
+                "const": false
+              }
+            }
+          },
+          "verification_results": {
+            "items": {
+              "properties": {
+                "result": {
+                  "const": "verified"
+                },
+                "binding_verified": {
+                  "const": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "const": "allow"
+          },
+          "profile": {
+            "const": "verified_authority"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "expires_at",
+          "replay_control_ref"
+        ],
+        "properties": {
+          "verification_results": {
+            "minItems": 2,
+            "allOf": [
+              {
+                "contains": {
+                  "properties": {
+                    "party_role": {
+                      "const": "consumer"
+                    }
+                  },
+                  "required": [
+                    "party_role"
+                  ]
+                }
+              },
+              {
+                "contains": {
+                  "properties": {
+                    "party_role": {
+                      "const": "company"
+                    }
+                  },
+                  "required": [
+                    "party_role"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "const": "allow"
+          },
+          "action": {
+            "properties": {
+              "category": {
+                "enum": [
+                  "protected_information",
+                  "service_action"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "verification_results": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "execution": {
+            "properties": {
+              "status": {
+                "const": "completed"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "execution": {
+            "required": [
+              "receipt_ref"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

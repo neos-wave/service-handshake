@@ -4,9 +4,10 @@ An open interaction standard for service interactions where one or more parties 
 
 **Current edition: SH-1.2 — 1 October 2026**
 
-[SH-1.2 Zenodo publication](https://doi.org/10.5281/zenodo.23181969) · [SH-1.1 publication](https://doi.org/10.5281/zenodo.19046746)
+- First published 16 March 2026 (SH-1.1). DOI: [10.5281/zenodo.19046746](https://doi.org/10.5281/zenodo.19046746)
+- Current version SH-1.2, published 1 October 2026. DOI: [10.5281/zenodo.23181969](https://doi.org/10.5281/zenodo.23181969)
 
-The SH-1.2 DOI is reserved for the accompanying Zenodo publication and may not resolve until that publication is live. The Markdown documents reproduce the publication PDFs; only presentation has been adapted for GitHub.
+The Markdown documents reproduce the publication PDFs; only presentation has been adapted for GitHub.
 
 ## Read the standard
 
